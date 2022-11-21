@@ -324,7 +324,7 @@ void read_answer(wchar_t *in, int max_size)
 {
 	wchar_t c;
 
-	while(c = getwchar() && c != '\n')
+	while((c = getwchar()) && c != '\n')
 		if(max_size-- > 0)
 			*(in++) = c;
 
@@ -344,5 +344,5 @@ void wide_print_integer(int in)
 		return;
 	}
 	wide_print_integer(in/10);
-	putwchar('0'+ (in % 10));
+	putwchar('0' + (in % 10));
 }

@@ -104,9 +104,6 @@ int main(int argc, char **argv)
 	state = IN_MEANING;
 	while((c = getwc(fin)) != WEOF)
 	{
-		if(c == ' ')
-			continue;
-			
 		if(state == IN_MEANING)
 		{
 			if(c == ',')

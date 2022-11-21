@@ -1,3 +1,25 @@
-hawk,たか,鷹
-sea,うみ,海
-human,にんげん
+times (multiplier),ばい,倍
+experience,けいけん,経験
+finance; economy,けいざい,経済
+sightseeing; visit,けんぶつ,見物
+quarrel,けんか,喧嘩
+chance; opportunity,きかい,機会
+danger,きけん,危険
+neighbourhood,きんじょ,近所
+silk,きぬ,絹
+train,きしゃ,汽車
+rule; regulation,きそく,規則
+international,こくさい,国際
+small and numerous;　fine,こまかい,米会
+husked rice,こめ,米
+damage; to be break down,こしょう,故障
+small bird,ことり,小鳥
+suburb,こうがい,郊外
+lecture,こうぎ,講義
+industry,こうぎょう,工業
+factory,こじょう,工場
+traffic,こうつう,交通
+compare,くらべる,比べる
+airport,くうこう,空港
+vacinity; around,まわり,周り
+government,せいふ,政府

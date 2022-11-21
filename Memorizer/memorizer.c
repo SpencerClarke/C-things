@@ -104,56 +104,55 @@ int main(int argc, char **argv)
 	state = IN_MEANING;
 	while((c = getwc(fin)) != WEOF)
 	{
-		if(c == '\n' && state == IN_MEANING)
-		{
-			printf("File is improperly formatted on line %d\n", i+1);
-			exit(1);
-		}
-		else if(c == ' ')
-		{
+		if(c == ' ')
 			continue;
+			
+		if(state == IN_MEANING)
+		{
+			if(c == ',')
+			{
+				if(meanings_sizes[i] > max_size)
+					max_size = meanings_sizes[i];
+				state = IN_KANA;
+			}
+			else if(c == '\n')
+			{
+				printf("File is improperly formatted on line %d\n", i+1);
+				exit(1);
+			}
+			else
+				meanings_sizes[i]++;
 		}
-			if(state == IN_MEANING)
+		else if(state == IN_KANA)
+		{
+			if(c == ',')
 			{
-				if(c == ',')
-				{
-					if(meanings_sizes[i] > max_size)
-						max_size = meanings_sizes[i];
-					state = IN_KANA;
-				}
-				else
-					meanings_sizes[i]++;
+				if(kana_sizes[i] > max_size)
+					max_size = kana_sizes[i];
+				state = IN_KANJI;
 			}
-			else if(state == IN_KANA)
+			else if(c == '\n')
 			{
-				if(c == ',')
-				{
-					if(kana_sizes[i] > max_size)
-						max_size = kana_sizes[i];
-					state = IN_KANJI;
-				}
-				else if(c == '\n')
-				{
-					if(kana_sizes[i] > max_size)
-						max_size = kana_sizes[i];
-					kana_only[i] = 1;
-					state = IN_MEANING;
-				}
-				else
-					kana_sizes[i]++;
+				if(kana_sizes[i] > max_size)
+					max_size = kana_sizes[i];
+				kana_only[i] = 1;
+				state = IN_MEANING;
 			}
-			else if(state == IN_KANJI)
+			else
+				kana_sizes[i]++;
+		}
+		else if(state == IN_KANJI)
+		{
+			if(c == '\n')
 			{
-				if(c == '\n')
-				{
-					if(kanji_sizes[i] > max_size)
-						max_size = kanji_sizes[i];
-					i++;
-					state = IN_MEANING;
-				}
-				else
-					kanji_sizes[i]++;
+				if(kanji_sizes[i] > max_size)
+					max_size = kanji_sizes[i];
+				i++;
+				state = IN_MEANING;
 			}
+			else
+				kanji_sizes[i]++;
+		}
 	}
 	fclose(fin);
 

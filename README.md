@@ -1,6 +1,14 @@
 # C things
+
+<p>Almost everything in here will be written in ANSI C for fun and practice and also to potentially use some of the written programs for adding minor convenience to tasks.</p>
+
 ---
 ## <a href="Verticalizer/">Verticalizer</a>
 <p>This program takes in Japanese text and prints out the text in pages of specified width and height in vertical writing style. The first argument is an integer representing the width of each page. The second argument is an integer representing the height of each page. The third argument is a filename to read from. If none is provided, it will default to stdin. The fourth argument is a filename to write to. If none is provided, it will default to stdout.</p>
 
 ![](Verticalizer/sample.png)
+
+## <a href="Memorizer/">Memorizer</a>
+<p>This program helps to learn Japanese words more effectively. takes in a txt file containig lines of two possible configurations. Each line starts with a word's meaning, followed by a comma, followed by the word written in hiragana, and then optionally followed by another comma and the word written in kanji. It then tests the user on each term, prompting them to enter the word in kanji if a kanji writing was specified, or in hiragana otherwise. If a term is guessed correctly, it is removed from the list it tests the user on. If it is guessed incorrectly, it is moved to the back of the list and the user will be tested on it again at the end.</p>
+
+![](Memorizer/sample.png)

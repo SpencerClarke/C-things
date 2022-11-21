@@ -324,8 +324,10 @@ void read_answer(wchar_t *in, int max_size)
 {
 	wchar_t c;
 
-	while((c = getwchar()) != '\n' && max_size-- > 0)
-		*(in++) = c;	
+	while((c = getwchar()) != '\n')
+		if(max_size-- > 0)
+			*(in++) = c;
+			
 	*in = '\0';
 }
 void wide_print(wchar_t *in)

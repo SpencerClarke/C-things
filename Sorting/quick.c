@@ -34,7 +34,7 @@ int main(int argc, char **argv)
 	shm_ptr = (int * ) shmat(shm_id, NULL, 0);
 
     for(i = 0; i < max; i++)
-        shm_ptr[i] = rand();
+		shm_ptr[i] = rand();
 
 	printf("Beginning quick and forky sort\n");
 	gettimeofday(&start, NULL);
@@ -51,7 +51,7 @@ int main(int argc, char **argv)
 	printf("Unsorted items: %d\n\n", badcount);
 
     for(i = 0; i < max; i++)
-        shm_ptr[i] = rand();
+		shm_ptr[i] = rand();
 
 	printf("Beginning regular quicksort\n");
 	gettimeofday(&start, NULL);

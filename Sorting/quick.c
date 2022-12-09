@@ -12,35 +12,35 @@ void quicksort_vanilla(int *arr, int low, int high);
 
 int main(int argc, char **argv)
 {
-    struct timeval stop, start;
+	struct timeval stop, start;
 	int badcount;
 	int shm_id;
-    int i;
-    int max;
+	int i;
+	int max;
 	int *shm_ptr;
 	int *nums;
 
-    if(argc < 2)
-    {
-        printf("No number given\n");
-        exit(1);
-    }
-    i = 0;
-    max = 0;
-    while(argv[1][i] >= '0' && argv[1][i] <= '9')
-    {
-        max = max * 10 + (argv[1][i] - '0');
-        i++;
-    }
+	if(argc < 2)
+	{
+        	printf("No number given\n");
+        	exit(1);
+    	}
+	i = 0;
+	max = 0;
+    	while(argv[1][i] >= '0' && argv[1][i] <= '9')
+    	{
+        	max = max * 10 + (argv[1][i] - '0');
+        	i++;
+    	}
 
 	nums = malloc(sizeof(int) * max);
-    for(i = 0; i < max; i++)
+	for(i = 0; i < max; i++)
 		nums[i] = rand();
 
 	shm_id = shmget(IPC_PRIVATE, sizeof(int)*max, IPC_CREAT | 0666);
 	shm_ptr = (int * ) shmat(shm_id, NULL, 0);
 
-    for(i = 0; i < max; i++)
+	for(i = 0; i < max; i++)
 		shm_ptr[i] = nums[i];
 
 	printf("Beginning quick and forky sort\n");
@@ -57,7 +57,7 @@ int main(int argc, char **argv)
 
 	printf("Unsorted items: %d\n\n", badcount);
 
-    for(i = 0; i < max; i++)
+	for(i = 0; i < max; i++)
 		shm_ptr[i] = nums[i];
 
 	printf("Beginning regular quicksort\n");

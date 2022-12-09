@@ -17,7 +17,8 @@ int main(int argc, char **argv)
     int i;
     int max;
 	int *shm_ptr;
-	
+	int *nums;
+
     if(argc < 2)
     {
         printf("No number given\n");
@@ -30,11 +31,16 @@ int main(int argc, char **argv)
         max = max * 10 + (argv[1][i] - '0');
         i++;
     }
+
+	nums = malloc(sizeof(int) * max);
+    for(i = 0; i < max; i++)
+		nums[i] = rand();
+
 	shm_id = shmget(IPC_PRIVATE, sizeof(int)*max, IPC_CREAT | 0666);
 	shm_ptr = (int * ) shmat(shm_id, NULL, 0);
 
     for(i = 0; i < max; i++)
-		shm_ptr[i] = rand();
+		shm_ptr[i] = nums[i];
 
 	printf("Beginning quick and forky sort\n");
 	gettimeofday(&start, NULL);
@@ -51,7 +57,7 @@ int main(int argc, char **argv)
 	printf("Unsorted items: %d\n\n", badcount);
 
     for(i = 0; i < max; i++)
-		shm_ptr[i] = rand();
+		shm_ptr[i] = nums[i];
 
 	printf("Beginning regular quicksort\n");
 	gettimeofday(&start, NULL);

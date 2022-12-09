@@ -9,6 +9,7 @@
 
 void quicksort_fork(int shm_id, int low, int high, int depth);
 void quicksort_vanilla(int *arr, int low, int high);
+
 int main(int argc, char **argv)
 {
     struct timeval stop, start;
@@ -76,6 +77,7 @@ int main(int argc, char **argv)
 	shmctl(shm_id, IPC_RMID, NULL);
 	return 0;
 }
+
 void quicksort_fork(int shm_id, int low, int high, int depth)
 {
 	int i, j;
@@ -121,7 +123,6 @@ void quicksort_fork(int shm_id, int low, int high, int depth)
 		quicksort_vanilla(arr, i+1, high);
 	}
 }
-
 
 void quicksort_vanilla(int *arr, int low, int high)
 {

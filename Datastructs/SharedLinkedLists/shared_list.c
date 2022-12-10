@@ -129,6 +129,12 @@ int get_at_index(int list_id, int index)
 	struct Node *current_node;
 	struct SharedLinkedList *list;
 	
+	if(index < 0)
+	{
+		printf("Out of bounds\n");
+		destroy(list_id);
+		exit(1);
+	}
 	list = (struct SharedLinkedList * )shmat(list_id, NULL, 0);
 	if(list->head == -1)
 	{

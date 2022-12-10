@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -58,7 +59,7 @@ struct Trie create_trie(void)
 
     out.root = malloc(sizeof(struct Node));
     out.root->children = malloc(sizeof(struct Node * ) * 8);
-    out.root->child_size = 8;
+    out.root->child_size = 1;
     out.root->child_count = 0;
 
     return out;
@@ -94,9 +95,9 @@ void add_word(struct Trie *trie, char *word, int number)
                 current_node->child_size *= 2;
             }
             new_node = malloc(sizeof(struct Node));
-            new_node->children = malloc(sizeof(struct Node) * 8);
+            new_node->children = malloc(sizeof(struct Node) * 1);
             new_node->child_count = 0;
-            new_node->child_size = 8;
+            new_node->child_size = 1;
             new_node->value = word[i];
             new_node->valid = 0;
             current_node->children[current_node->child_count++] = new_node;

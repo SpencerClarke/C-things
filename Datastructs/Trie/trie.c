@@ -21,6 +21,8 @@ struct Trie create_trie(void);
 void add_word(struct Trie *trie, char *word);
 int has_word(struct Trie *trie, char *word);
 void delete(struct Trie *trie, char *word);
+void _destroy(struct Node *current);
+void destroy(struct Trie *trie);
 
 int main(int argc, char **argv)
 {
@@ -45,6 +47,9 @@ int main(int argc, char **argv)
     else
         printf("\"%s\" was not found.\n", argv[2]);
 
+    delete(&trie, "abys");
+    destroy(&trie);
+    fclose(fin);
     return 0;
 }
 
@@ -171,6 +176,7 @@ void delete(struct Trie *trie, char *word)
     {
         previous_node->children[j] = NULL;
         previous_node->child_count--;
+        free(current_node->children);
         free(current_node);
         if(!previous_node->valid)
         {
@@ -182,10 +188,24 @@ void delete(struct Trie *trie, char *word)
             }
             new_word[i] = '\0';
             delete(trie, new_word);
+            free(new_word);
         }
     }
     else
     {
         current_node->valid = 0;
     }
+}
+void _destroy(struct Node *current)
+{
+    int i;
+
+    for(i = 0; i < current->child_count; i++)
+        _destroy(current->children[i]);
+    free(current->children);
+    free(current);
+}
+void destroy(struct Trie *trie)
+{
+    _destroy(trie->root);
 }

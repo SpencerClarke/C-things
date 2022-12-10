@@ -47,7 +47,6 @@ int main(int argc, char **argv)
     }
     printf("\"%s\": %d\n", argv[2], index_of(&trie, argv[2]));
 
-    delete(&trie, "a");
     destroy(&trie);
     fclose(fin);
     return 0;

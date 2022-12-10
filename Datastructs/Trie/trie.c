@@ -20,12 +20,12 @@ struct Trie
 struct Trie create_trie(void);
 void add_word(struct Trie *trie, char *word);
 int has_word(struct Trie *trie, char *word);
+void delete(struct Trie *trie, char *word);
 
 int main(int argc, char **argv)
 {
     struct Trie trie;
     char word[256];
-    
     FILE *fin;
 
     if(argc < 3 || (fin = fopen(argv[1], "r")) == NULL)
@@ -44,6 +44,7 @@ int main(int argc, char **argv)
         printf("\"%s\" was found.\n", argv[2]);
     else
         printf("\"%s\" was not found.\n", argv[2]);
+
     return 0;
 }
 
@@ -128,4 +129,63 @@ int has_word(struct Trie *trie, char *word)
         }
     }
     return current_node->valid;
+}
+
+void delete(struct Trie *trie, char *word)
+{
+    int i;
+    int j;
+    int found;
+    int length;
+    char *new_word;
+    struct Node *current_node;
+    struct Node *previous_node;
+
+    if(word == "")
+    {
+        trie->root->valid = 0;
+        return;
+    }
+
+    current_node = trie->root;
+    
+    for(i = 0; word[i] != '\0'; i++)
+    {
+        found = 0;
+        for(j = 0; j < current_node->child_count; j++)
+        {
+            if(current_node->children[j]->value == word[i])
+            {
+                previous_node = current_node;
+                current_node = current_node->children[j];
+                found = 1;
+                break;
+            }
+        }
+        if(!found)
+        {
+            return;
+        }
+    }
+    if(current_node->child_count == 0)
+    {
+        previous_node->children[j] = NULL;
+        previous_node->child_count--;
+        free(current_node);
+        if(!previous_node->valid)
+        {
+            length = strlen(word);
+            new_word = malloc(sizeof(char) * length);
+            for(i = 0; i < length-1; i++)
+            {
+                new_word[i] = word[i];
+            }
+            new_word[i] = '\0';
+            delete(trie, new_word);
+        }
+    }
+    else
+    {
+        current_node->valid = 0;
+    }
 }

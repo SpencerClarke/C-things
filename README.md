@@ -13,5 +13,11 @@
 <p>This program takes in a number, produces that many random integers, and then sorts them using two variants of quicksort and compares the times it takes to sort them. The first one uses Unix forks and shared memory to have multiple processes working on sorting different partitions of the list, and stops generating forks after it is 8 layers into the recursion, thus creating 256 processes in total. This may have some speed advantage over the second one, which is just regular quick sort.</p>
 
 ## <a href="Datastructs/">Datastructs</a>
-<p>This folder is going to have data structures that I write. For now it contains a binary search tree and a program that takes in a filename of a file containing nothing but a single integer on each line, and an integer, and prints out whether or not the file contains the integer using the BST, as well as the path it took down the tree to find or fail to find the integer</p>
+<p>This folder is going to have data structures that I write when I am bored. For now it contains the following things
+<ol>
+    <li>A binary search tree with implementations to insert values, check if values exist, and remove values <a href="Datastructs/BST">here.</a></li>
+    <li>A linked list that gets stored in shared memory and can be used across multiple processes with implementations to push, pop, get values at indices, and destroy the list <a href="Datastructs/SharedLinkedLists">here.</a></li>
+</ol>
+</p>
+
 

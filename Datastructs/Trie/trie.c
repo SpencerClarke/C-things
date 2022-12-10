@@ -7,6 +7,7 @@ struct Node
     int child_count;
     int child_size;
     int valid;
+    int number; 
 
     char value;
      
@@ -18,8 +19,8 @@ struct Trie
 };
 
 struct Trie create_trie(void);
-void add_word(struct Trie *trie, char *word);
-int has_word(struct Trie *trie, char *word);
+void add_word(struct Trie *trie, char *word, int number);
+int index_of(struct Trie *trie, char *word);
 void delete(struct Trie *trie, char *word);
 void _destroy(struct Node *current);
 void destroy(struct Trie *trie);
@@ -28,6 +29,7 @@ int main(int argc, char **argv)
 {
     struct Trie trie;
     char word[256];
+    int i;
     FILE *fin;
 
     if(argc < 3 || (fin = fopen(argv[1], "r")) == NULL)
@@ -37,15 +39,14 @@ int main(int argc, char **argv)
     }
 
     trie = create_trie();
-    while(fgets(word, 256, fin) != NULL)
+
+    for(i = 0; fgets(word, 256, fin) != NULL; i++)
     {
         word[strlen(word)-1] = '\0';
-        add_word(&trie, word);
+        add_word(&trie, word, i);
     }
-    if(has_word(&trie, argv[2]))
-        printf("\"%s\" was found.\n", argv[2]);
-    else
-        printf("\"%s\" was not found.\n", argv[2]);
+    printf("\"%s\": %d\n", argv[2], index_of(&trie, argv[2]));
+
 
     delete(&trie, "abys");
     destroy(&trie);
@@ -65,7 +66,7 @@ struct Trie create_trie(void)
     return out;
 }
 
-void add_word(struct Trie *trie, char *word)
+void add_word(struct Trie *trie, char *word, int number)
 {
     int i;
     int j;
@@ -105,9 +106,10 @@ void add_word(struct Trie *trie, char *word)
         }
     }
     current_node->valid = 1;
+    current_node->number = number;
 }
 
-int has_word(struct Trie *trie, char *word)
+int index_of(struct Trie *trie, char *word)
 {
     int i;
     int j;
@@ -130,10 +132,17 @@ int has_word(struct Trie *trie, char *word)
         }
         if(!found)
         {
-            return 0;
+            printf("Value not found\n");
+            exit(2);
         }
     }
-    return current_node->valid;
+    if(current_node->valid)
+        return current_node->number;
+    else
+    {
+        printf("Value not found\n");
+        exit(2);
+    }
 }
 
 void delete(struct Trie *trie, char *word)

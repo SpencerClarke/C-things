@@ -16,7 +16,6 @@ struct SharedLinkedList
 	int head;
 };
 
-FILE *fout;
 
 int create_list(void);
 int pop(int list_id);
@@ -29,7 +28,6 @@ int main(void)
 	int list_id;
 	int i;
 	
-	fout = fopen("sharedmemorylog.txt", "w");
 	list_id = create_list();
 
 	if(fork() == 0)
@@ -60,7 +58,6 @@ int create_list(void)
 		exit(1);
 	}
 
-	fprintf(fout, "%d\n", shm_id);
 
 	list = (struct SharedLinkedList *)shmat(shm_id, NULL, 0);
 	list->head = -1;
@@ -85,8 +82,6 @@ void push(int list_id, int value)
 		destroy(list_id);
 		exit(1);
 	}
-
-	fprintf(fout, "%d\n", new_id);
 
 	new = (struct Node *)shmat(new_id, NULL, 0);
 	new->value = value;

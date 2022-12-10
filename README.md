@@ -16,7 +16,7 @@
 <p>This folder is going to have data structures that I write when I am bored. For now it contains the following things
 <ol>
     <li>A binary search tree with implementations to insert values, check if values exist, and remove values <a href="Datastructs/BST"> here</a></li>
-    <li>A linked list that gets stored in shared memory in UNIX, and can be used across multiple processes, with implementations to push, pop, get values at indices, and destroy the list. Each node contains a value and the shared memory ID of the next. This is probably not very useful as each node is it's own shared memory segment, but I thought it to be conceptually interesting. <a href="Datastructs/SharedLinkedLists"> here</a></li>
+    <li>A linked list that sits in shared memory, where each node is a value and the shared memory ID of the next node. I came up with this when I was trying to think of a joke about not wanting to use malloc. <a href="Datastructs/SharedLinkedLists"> here</a></li>
 </ol>
 </p>
 

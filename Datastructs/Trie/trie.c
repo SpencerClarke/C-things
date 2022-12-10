@@ -47,8 +47,7 @@ int main(int argc, char **argv)
     }
     printf("\"%s\": %d\n", argv[2], index_of(&trie, argv[2]));
 
-
-    delete(&trie, "abys");
+    delete(&trie, "a");
     destroy(&trie);
     fclose(fin);
     return 0;
@@ -155,12 +154,12 @@ void delete(struct Trie *trie, char *word)
     struct Node *current_node;
     struct Node *previous_node;
 
-    if(word == "")
+    if(word[0] == '\0')
     {
+        exit(2);
         trie->root->valid = 0;
         return;
     }
-
     current_node = trie->root;
     
     for(i = 0; word[i] != '\0'; i++)
@@ -185,6 +184,9 @@ void delete(struct Trie *trie, char *word)
     {
         previous_node->children[j] = NULL;
         previous_node->child_count--;
+        if(j == 0)
+            previous_node->children[0] = previous_node->children[previous_node->child_count];
+
         free(current_node->children);
         free(current_node);
         if(!previous_node->valid)
@@ -203,6 +205,7 @@ void delete(struct Trie *trie, char *word)
     else
     {
         current_node->valid = 0;
+        return;
     }
 }
 void _destroy(struct Node *current)

@@ -22,7 +22,7 @@
 </p>
 
 ## <a href="Autocomplete/">Autocomplete</a>
-<p>This folder contains a program that takes in a filename as it's first argument of a file containing words that should be sorted by frequency of usage, with the word at the top of the file being the most common. It will then repeatedly ask the user to enter in a string and it will try to perform an autocomplete function from the set of words using the trie data structure in <a href="Datastructs/Trie">Datastructs/Trie.</a>
+<p>This folder contains a program that takes in a filename as it's first argument of a file containing words that should be sorted by frequency of usage, with the word at the top of the file being the most common. It will then repeatedly ask the user to enter in a string and it will try to perform an autocomplete function from the set of words using the trie data structure in <a href="Datastructs/Trie">Datastructs/Trie. If "stop" is typed, the program will free all allocated memory and cease</a>
 </p>
 
 

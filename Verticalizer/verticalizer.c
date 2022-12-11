@@ -4,8 +4,6 @@
 #include <wchar.h>
 #define LOGOGRAPHIC_WHITESPACE 12288
 
-int print_page(int height, int width);
-
 int main(int argc, char **argv)
 {
 	FILE *fin, *fout;

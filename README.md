@@ -17,7 +17,12 @@
 <ol>
     <li>A binary search tree with implementations to insert values, check if values exist, and remove values <a href="Datastructs/BST"> here</a></li>
     <li>A linked list that sits in shared memory, where each node is a value and the shared memory ID of the next node. I came up with this when I was trying to think of a joke about not wanting to use malloc. <a href="Datastructs/SharedLinkedLists"> here</a></li>
+    <li>A trie that can store a bunch of strings and pair them with ints. The integer value can then be retrieved for any given string. There is also functionality to remove nodes and free the entire tree.<a href="Datastructs/Trie">here</a></li>
 </ol>
+</p>
+
+## <a href="Autocomplete/">Autocomplete</a>
+<p>This folder contains a program that takes in a filename as it's first argument of a file containing words that should be sorted by frequency of usage, with the word at the top of the file being the most common. It will then repeatedly ask the user to enter in a string and it will try to perform an autocomplete function from the set of words using the trie data structure in <a href="Datastructs/Trie">Datastructs/Trie.</a>
 </p>
 
 

@@ -1,6 +1,7 @@
 import xml.dom.minidom
+import sys
 
-document = xml.dom.minidom.parse('words.xhtml')
+document = xml.dom.minidom.parse(sys.argv[1])
 
 out = open("temp.txt", "a")
 for node in document.getElementsByTagName('div'):
@@ -13,6 +14,8 @@ for node in document.getElementsByTagName('div'):
     if node.hasChildNodes():
         for child in node.childNodes:
             if child.nodeType == child.TEXT_NODE:
+                kana += child.nodeValue.strip()
+                kanji += child.nodeValue.strip()
                 continue
             if not child.tagName == "div":
                 continue

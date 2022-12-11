@@ -28,7 +28,6 @@ struct Trie
 struct Trie create_trie(void);
 void add_word(struct Trie *trie, wchar_t *word, wchar_t *writing, int writing_commonality);
 int get_writings(struct Trie *trie, wchar_t *word, wchar_t **buffer, int buff_size);
-void delete(struct Trie *trie, wchar_t *word);
 int has_key(struct Trie *trie, wchar_t *word);
 void _destroy(struct Node *current);
 void destroy(struct Trie *trie);
@@ -192,69 +191,6 @@ int get_writings(struct Trie *trie, wchar_t *word, wchar_t **buffer, int buff_si
         return i;
     }
     return 0;
-}
-void delete(struct Trie *trie, wchar_t *word)
-{
-    int i;
-    int j;
-    int found;
-    int length;
-    wchar_t *new_word;
-    struct Node *current_node;
-    struct Node *previous_node;
-
-    if (word[0] == '\0')
-    {
-        trie->root->is_word = 0;
-        return;
-    }
-    current_node = trie->root;
-
-    for (i = 0; word[i] != '\0'; i++)
-    {
-        found = 0;
-        for (j = 0; j < current_node->child_count; j++)
-        {
-            if (current_node->children[j]->key_part == word[i])
-            {
-                previous_node = current_node;
-                current_node = current_node->children[j];
-                found = 1;
-                break;
-            }
-        }
-        if (!found)
-        {
-            return;
-        }
-    }
-    if (current_node->child_count == 0)
-    {
-        previous_node->children[j] = NULL;
-        previous_node->child_count--;
-        if (j == 0)
-            previous_node->children[0] = previous_node->children[previous_node->child_count];
-
-        free(current_node->children);
-        free(current_node);
-        if (!previous_node->is_word)
-        {
-            length = wcslen(word);
-            new_word = malloc(sizeof(wchar_t) * length);
-            for (i = 0; i < length - 1; i++)
-            {
-                new_word[i] = word[i];
-            }
-            new_word[i] = '\0';
-            delete (trie, new_word);
-            free(new_word);
-        }
-    }
-    else
-    {
-        current_node->is_word = 0;
-        return;
-    }
 }
 
 void _destroy(struct Node *current)

@@ -7,9 +7,9 @@ struct Node
     int child_count;
     int child_size;
     int is_word;
-    int value; 
 
-    char key_part;
+    int value; 
+    char key;
      
     struct Node **children;
     struct Node *parent;
@@ -24,9 +24,41 @@ void add_word(struct Trie *trie, char *word, int value);
 int index_of(struct Trie *trie, char *word);
 void delete(struct Trie *trie, char *word);
 struct Node *_get_highest_node(struct Node *current, int current_max);
-int get_highest_key(struct Trie *trie, char *buffer, char *start, int buff_size);
+int get_highest_key(struct Trie *trie, char *start, char *buffer, int buff_size);
 void _destroy(struct Node *current);
 void destroy(struct Trie *trie);
+
+int main(int argc, char **argv)
+{
+    struct Trie trie;
+    char word[256];
+    char *highest;
+    int i;
+    FILE *fin;
+
+    if(argc < 3 || (fin = fopen(argv[1], "r")) == NULL)
+    {
+        printf("Bad input\n");
+        return 2;
+    }
+
+    trie = create_trie();
+
+    for(i = 0; fgets(word, 256, fin) != NULL; i++)
+    {
+        word[strlen(word)-1] = '\0';
+        add_word(&trie, word, i);
+    }
+    printf("\"%s\": %d\n", argv[2], index_of(&trie, argv[2]));
+
+    highest = malloc(sizeof(char) * 256);
+    printf("Highest key: %d\n", get_highest_key(&trie, highest, "", 256));
+    printf("Highest word: %s\n", highest);
+
+    destroy(&trie);
+    fclose(fin);
+    return 0;
+}
 
 struct Trie create_trie(void)
 {
@@ -56,7 +88,7 @@ void add_word(struct Trie *trie, char *word, int value)
         found = 0;
         for(j = 0; j < current_node->child_count; j++)
         {
-            if(current_node->children[j]->key_part == word[i])
+            if(current_node->children[j]->key == word[i])
             {
                 current_node = current_node->children[j];
                 found = 1;
@@ -75,7 +107,7 @@ void add_word(struct Trie *trie, char *word, int value)
             new_node->child_count = 0;
             new_node->child_size = 1;
             new_node->parent = current_node;
-            new_node->key_part = word[i];
+            new_node->key = word[i];
             new_node->is_word = 0;
             current_node->children[current_node->child_count++] = new_node;
             current_node = new_node;
@@ -99,7 +131,7 @@ int index_of(struct Trie *trie, char *word)
         found = 0;
         for(j = 0; j < current_node->child_count; j++)
         {
-            if(current_node->children[j]->key_part == word[i])
+            if(current_node->children[j]->key == word[i])
             {
                 current_node = current_node->children[j];
                 found = 1;
@@ -108,7 +140,7 @@ int index_of(struct Trie *trie, char *word)
         }
         if(!found)
         {
-            printf("key_part not found\n");
+            printf("key not found\n");
             exit(2);
         }
     }
@@ -116,7 +148,7 @@ int index_of(struct Trie *trie, char *word)
         return current_node->value;
     else
     {
-        printf("key_part not found\n");
+        printf("key not found\n");
         exit(2);
     }
 }
@@ -143,7 +175,7 @@ void delete(struct Trie *trie, char *word)
         found = 0;
         for(j = 0; j < current_node->child_count; j++)
         {
-            if(current_node->children[j]->key_part == word[i])
+            if(current_node->children[j]->key == word[i])
             {
                 previous_node = current_node;
                 current_node = current_node->children[j];
@@ -209,15 +241,13 @@ struct Node *_get_highest_node(struct Node *current, int current_max)
     }
     return true_max;
 }
-int get_highest_key(struct Trie *trie, char *buffer, char *start, int buff_size)
+int get_highest_key(struct Trie *trie, char *start, char *buffer, int buff_size)
 {
-
     struct Node *max;
     struct Node *root;
     int max_num;
     int found;
-    int i;
-    int j;
+    int i, j;
 
     if(buff_size < 1)
     {
@@ -225,23 +255,26 @@ int get_highest_key(struct Trie *trie, char *buffer, char *start, int buff_size)
         exit(2);
     }
     root = trie->root;
-    for(i = 0; start[i] != '\0'; i++)
+    while(*start != '\0')
     {
         found = 0;
-        for(j = 0; j < root->child_count; j++)
+        for(i = 0; i < root->child_count; i++)
         {
-            if(root->children[j]->key_part == start[i])
+            if(root->children[i]->key == *start)
             {
                 found = 1;
-                root = root->children[j];
+                root = root->children[i];
                 break;
             }
         }
         if(!found)
         {
-            return 0;
+            printf("Bad start\n");
+            exit(2);
         }
+        (*start)++;
     }
+    printf("%d\n", root->child_count);
     max = _get_highest_node(root, INT_MIN);
     max_num = max->value;
     buffer[0] = '\0';
@@ -249,10 +282,10 @@ int get_highest_key(struct Trie *trie, char *buffer, char *start, int buff_size)
     {
         for(j = i; j >= 0; j--)
             buffer[j+1] = buffer[j];
-        buffer[0] = max->key_part;
+        buffer[0] = max->key;
         max = max->parent;
     }
-    return 1;
+    return max_num;
 }
 
 void _destroy(struct Node *current)

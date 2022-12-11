@@ -34,8 +34,7 @@ int main(int argc, char **argv)
 	setlocale(LC_CTYPE,"C.UTF-8");
 
     trie = create_trie();
-
-	fin = fopen(argv[1], "r");
+    
 	i = j = 0;
     flip = 0;
     writing[0] = '\0';
@@ -70,7 +69,9 @@ int main(int argc, char **argv)
     for(i = 0; finished_building[i] != '\0'; i++)
         putwchar(finished_building[i]); 
     writings = malloc(sizeof(wchar_t * ) * 256);
-    
+    destroy(&trie);
+    free(writings);
+    return 0;
     while(1)
     {
         for(i = 0; enter_word[i] != '\0'; i++)
@@ -96,5 +97,6 @@ int main(int argc, char **argv)
         putwchar('\n');
     }
     destroy(&trie);
+    free(writings);
     return 0;
 }

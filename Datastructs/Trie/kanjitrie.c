@@ -80,7 +80,7 @@ void add_word(struct KanjiTrie *trie, wchar_t *word, wchar_t *writing, int writi
                 current_node->child_size *= 2;
             }
             new_node = malloc(sizeof(struct Node));
-            new_node->children = malloc(sizeof(struct Node) * 1);
+            new_node->children = malloc(sizeof(struct Node));
             new_node->child_count = 0;
             new_node->writing_count = 0;
             new_node->child_size = 1;
@@ -202,11 +202,10 @@ void _destroy(struct Node *current)
     if(current->is_word)
     {
         for(i = 0; i < current->writing_count; i++)
-        {
             free(current->writing_list[i]);
-        }
         free(current->writing_list);
     }
+    free(current->commonality_order);
     free(current->children);
     free(current);
 }

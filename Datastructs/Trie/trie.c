@@ -25,6 +25,7 @@ int index_of(struct Trie *trie, char *word);
 void delete(struct Trie *trie, char *word);
 struct Node *_get_highest_node(struct Node *current, int current_max);
 int get_highest_key(struct Trie *trie, char *buffer, char *start, int buff_size);
+int has_key(struct Trie *trie, char *word);
 void _destroy(struct Node *current);
 void destroy(struct Trie *trie);
 
@@ -108,7 +109,7 @@ int index_of(struct Trie *trie, char *word)
         }
         if(!found)
         {
-            printf("key_part not found\n");
+            printf("Key not found\n");
             exit(2);
         }
     }
@@ -116,11 +117,44 @@ int index_of(struct Trie *trie, char *word)
         return current_node->value;
     else
     {
-        printf("key_part not found\n");
+        printf("Key not found\n");
         exit(2);
     }
 }
 
+int has_key(struct Trie *trie, char *word)
+{
+    int i;
+    int j;
+    int found;
+    struct Node *current_node;
+
+    current_node = trie->root;
+    
+    for(i = 0; word[i] != '\0'; i++)
+    {
+        found = 0;
+        for(j = 0; j < current_node->child_count; j++)
+        {
+            if(current_node->children[j]->key_part == word[i])
+            {
+                current_node = current_node->children[j];
+                found = 1;
+                break;
+            }
+        }
+        if(!found)
+        {
+            return 0;
+        }
+    }
+    if(current_node->is_word)
+        return 1;
+    else
+    {
+        return 0;
+    }
+}
 void delete(struct Trie *trie, char *word)
 {
     int i;

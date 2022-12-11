@@ -40,10 +40,15 @@ int main(int argc, char **argv)
             printf("Goodbye\n");
             break;
         }
-        if(get_highest_key(&trie, highest, input, 256))
-            printf("Prediction: %s\n", highest);
+        if(!has_key(&trie, input))
+        {
+            if(get_highest_key(&trie, highest, input, 256))
+                printf("Prediction: %s\n", highest);
+            else
+                printf("No prediction.\n");
+        }
         else
-            printf("No prediction.\n");
+            printf("Word found.\n");
     }
     destroy(&trie);
     free(highest);

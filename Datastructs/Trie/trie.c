@@ -33,7 +33,7 @@ struct Trie create_trie(void)
     struct Trie out;
 
     out.root = malloc(sizeof(struct Node));
-    out.root->children = malloc(sizeof(struct Node * ) * 8);
+    out.root->children = malloc(sizeof(struct Node * ));
     out.root->child_size = 1;
     out.root->child_count = 0;
     out.root->parent = NULL;

@@ -1,6 +1,6 @@
 # C things
 
-<p>Almost everything in here will be written in ANSI C for fun and practice and also to potentially use some of the written programs for adding minor convenience to tasks.</p>
+<p>Almost everything in here will be written in C for fun and practice and also to potentially use some of the written programs for adding minor convenience to tasks.</p>
 
 ---
 ## <a href="Verticalizer/">Verticalizer</a>

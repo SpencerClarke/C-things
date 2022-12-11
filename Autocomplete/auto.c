@@ -35,7 +35,7 @@ int main(int argc, char **argv)
         fgets(input, 256, stdin);
         input[strlen(input)-1] = '\0';
 
-        if(input == "stop")
+        if(strcmp(input, "stop"))
         {
             printf("Goodbye\n");
             break;

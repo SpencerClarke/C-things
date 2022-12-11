@@ -20,21 +20,21 @@ struct Node
     struct Node **children;
     struct Node *parent;
 };
-struct Trie
+struct KanjiTrie
 {
     struct Node *root;
 };
 
-struct Trie create_trie(void);
-void add_word(struct Trie *trie, wchar_t *word, wchar_t *writing, int writing_commonality);
-int get_writings(struct Trie *trie, wchar_t *word, wchar_t **buffer, int buff_size);
-int has_key(struct Trie *trie, wchar_t *word);
+struct KanjiTrie create_trie(void);
+void add_word(struct KanjiTrie *trie, wchar_t *word, wchar_t *writing, int writing_commonality);
+int get_writings(struct KanjiTrie *trie, wchar_t *word, wchar_t **buffer, int buff_size);
+int has_key(struct KanjiTrie *trie, wchar_t *word);
 void _destroy(struct Node *current);
-void destroy(struct Trie *trie);
+void destroy(struct KanjiTrie *trie);
 
-struct Trie create_trie(void)
+struct KanjiTrie create_trie(void)
 {
-    struct Trie out;
+    struct KanjiTrie out;
 
     out.root = malloc(sizeof(struct Node));
     out.root->children = malloc(sizeof(struct Node *));
@@ -47,7 +47,7 @@ struct Trie create_trie(void)
     return out;
 }
 
-void add_word(struct Trie *trie, wchar_t *word, wchar_t *writing, int writing_commonality)
+void add_word(struct KanjiTrie *trie, wchar_t *word, wchar_t *writing, int writing_commonality)
 {
     int i;
     int j;
@@ -127,7 +127,7 @@ void add_word(struct Trie *trie, wchar_t *word, wchar_t *writing, int writing_co
     }
 }
 
-int has_key(struct Trie *trie, wchar_t *word)
+int has_key(struct KanjiTrie *trie, wchar_t *word)
 {
     int i;
     int j;
@@ -160,7 +160,7 @@ int has_key(struct Trie *trie, wchar_t *word)
         return 0;
     }
 }
-int get_writings(struct Trie *trie, wchar_t *word, wchar_t **buffer, int buff_size)
+int get_writings(struct KanjiTrie *trie, wchar_t *word, wchar_t **buffer, int buff_size)
 {
     int i;
     int j;
@@ -210,7 +210,7 @@ void _destroy(struct Node *current)
     free(current->children);
     free(current);
 }
-void destroy(struct Trie *trie)
+void destroy(struct KanjiTrie *trie)
 {
     _destroy(trie->root);
 }

@@ -6,12 +6,14 @@
 #include <limits.h>
 
 #include "../Datastructs/Trie/kanjitrie.c"
+
+#define MAX_SIZE 256
 int main(int argc, char **argv)
 {
-    struct Trie trie;
-    wchar_t word[256];
-    wchar_t writing[256];
-    wchar_t input[256];
+    struct KanjiTrie trie;
+    wchar_t word[MAX_SIZE];
+    wchar_t writing[MAX_SIZE];
+    wchar_t input[MAX_SIZE];
     wchar_t **writings;
     int writings_count;
     wchar_t c;
@@ -20,6 +22,8 @@ int main(int argc, char **argv)
     int j;
     FILE *fin;
 
+    wchar_t finished_building[] = L"Finished building.\n";
+    wchar_t enter_word[] = L"Enter word: ";
 
     if(argc < 2 || (fin = fopen(argv[1], "r")) == NULL)
     {
@@ -47,10 +51,8 @@ int main(int argc, char **argv)
                 j = 0;
                 flip = 0;
             }
-            else
-            {
-                writing[j++] = c;
-            }
+            else if(j < MAX_SIZE-1)
+                    writing[j++] = c;
         }
         else
         {
@@ -60,22 +62,25 @@ int main(int argc, char **argv)
                 j = 0;
                 flip = 1;
             }
-            else
-            {
+            else if(j < MAX_SIZE-1)
                 word[j++] = c;
-            }
         }
 	}
     fclose(fin);
-    wprintf(L"Finished building\n");
+    for(i = 0; finished_building[i] != '\0'; i++)
+        putwchar(finished_building[i]); 
     writings = malloc(sizeof(wchar_t * ) * 256);
     
     while(1)
     {
-        wprintf(L"Please enter a word in hiragana: ");
-        for(i = 0; i < 255 && (c = getwchar()) != '\n' && c != WEOF; i++)
+        for(i = 0; enter_word[i] != '\0'; i++)
+            putwchar(enter_word[i]); 
+
+        i = 0;
+        while((c = getwchar()) != '\n' && c != WEOF)
         {
-            input[i] = c;
+            if(i < MAX_SIZE-1)
+                input[i++] = c;
         }
         input[i] = '\0';
         if(input[0] == '\0')
@@ -84,9 +89,11 @@ int main(int argc, char **argv)
         writings_count = get_writings(&trie, input, writings, 100);
         for(i = 0; i < writings_count; i++)
         {
-            wprintf(L"%ls\n", writings[i]);
+            for(j = 0; writings[i][j] != '\0'; j++)
+                putwchar(writings[i][j]);
+            putwchar('\n');
         }
-        wprintf(L"\n");
+        putwchar('\n');
     }
     destroy(&trie);
     return 0;

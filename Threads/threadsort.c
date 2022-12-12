@@ -105,7 +105,7 @@ void *quicksort_threaded(void *arg)
 	temp = arr[i];
 	arr[i] = arr[data->r];
 	arr[data->r] = temp;
-	if(data->depth > 13)
+	if(data->depth > 4)
 	{
 		quicksort_global(data->l, i-1);
 		quicksort_global(i+1, data->r);

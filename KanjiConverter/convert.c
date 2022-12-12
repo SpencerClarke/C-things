@@ -69,9 +69,6 @@ int main(int argc, char **argv)
     for(i = 0; finished_building[i] != '\0'; i++)
         putwchar(finished_building[i]); 
     writings = malloc(sizeof(wchar_t * ) * 256);
-    destroy(&trie);
-    free(writings);
-    return 0;
     while(1)
     {
         for(i = 0; enter_word[i] != '\0'; i++)

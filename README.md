@@ -30,5 +30,8 @@
 <p>This folder contains multiple files that work together to create a converter to convert Japanese words written in hiragana into kanji. Firstly, there is a file called get_list.sh that gets a series of links from a file called links.txt that link to Kanshudo, a website for Japanese learners. Next, it curls those links into html files. Next, the files are converted into well-formed xhtml files using a java program called tagsoup. Next, the files are parsed using python's Minidom module to scrape a decently sized list of words written in Japanese from the xhtml files and outputs them to a file called temp.txt. Next, get_list.sh removes any duplicates from temp.txt and replaces it with out.txt The program "convert.c" can take it's filename in as a command line argument and build a prefix tree using the scraped data. It will then wait for the user to type in a word in hiragana and print out all of it's writings that were found. If the list of data is ordered from most common to least common, with the top being most common, which should roughly be the case here, the writings printed will be in order from most common to least common. If the user enters nothing, the program frees the prefix tree and exits.
 </p>
 
+## <a href="Threads/">Threads</a>
+<p>This folder contains some experimental proof of programs that I wrote as someone who is very new to multithreaded programming. It contains one program that compares the runtime of regular quicksort and a variant of quicksort that uses multiple threads. It also contains a program that uses a mutex around a critical section and estimates the value of pi by estimating the integral of 4/(x²+1) from x=0 to x=1 using four threads.
+</p>
 
 

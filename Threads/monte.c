@@ -66,7 +66,7 @@ void *monte(void *arg)
     in_count = total_count = 0;
     for(i = 0; i < data->len; i++)
     {
-        if(sqrt(data->x_arr[i]*data->x_arr[i] + data->y_arr[i]*data->y_arr[i]) < 1.0)
+        if(data->x_arr[i]*data->x_arr[i] + data->y_arr[i]*data->y_arr[i] < 1.0)
         {
             in_count++;
         }

@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include <pthread.h>
 
-#define NUM_THREADS 4
+#define NUM_THREADS 30
 
 void *integ(void *arg);
 

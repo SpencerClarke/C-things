@@ -31,7 +31,7 @@
 </p>
 
 ## <a href="Threads/">Threads</a>
-<p>This folder contains some experimental proof of concept programs that I wrote as someone who is very new to multithreaded programming. It contains one program that compares the runtime of regular quicksort and a variant of quicksort that uses multiple threads. It also contains a program that uses a mutex around a critical section and estimates the value of pi by estimating the integral of 4/(x²+1) from x=0 to x=1 using four threads.
+<p>This folder contains some experimental proof of concept programs that I wrote as someone who is very new to multithreaded programming. It contains one program that compares the runtime of regular quicksort and a variant of quicksort that uses multiple threads. It also contains two programs that have critical sections and use mutexes. They both estimate pi. integ.c calculates pi by estimating the integral of 4/(x²+1) from x=0 to x=1. monte.c uses the Monte Carlo method using many random points and calculating how many of them reside within a circle inscribed in a square. They both use multiple threads to work on different sections of data.
 </p>
 
 

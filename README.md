@@ -31,7 +31,7 @@
 </p>
 
 ## <a href="Threads/">Threads</a>
-<p>This folder contains some experimental proof of concept programs that estimate pi and divide up the problem of estimation and distribute it among multiple threads. Two programs use monte carlo pi estimation using random points, and two of them calculate pi by estimating the definite integral of 4/(x²+1) over the interval 0 <= x <= 1. There are versions of both methods using pthreads, and OpenMP because I wanted to try using both facilities.
+<p>This folder contains some experimental proof of concept programs that estimate pi and divide up the problem of estimation and distribute it among multiple threads. Two programs use monte carlo pi estimation using random points, and two of them calculate pi by estimating the definite integral of 4/(x²+1) over the interval 0 <= x <= 1. There are versions of both methods using pthreads, and OpenMP because I wanted to try using both facilities. In addition, there is also a program that compares regular quicksort with a multithreaded quicksort written with pthreads.
 </p>
 
 

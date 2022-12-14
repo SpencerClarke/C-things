@@ -4,7 +4,7 @@
 #include <pthread.h>
 #include <omp.h>
 
-#define NUM_THREADS 30
+#define NUM_THREADS 20
 
 int main(int argc, char **argv)
 {
@@ -33,7 +33,7 @@ int main(int argc, char **argv)
         tcount = omp_get_num_threads();
         for(i = tid; i < size; i += tcount)
         {
-            x = i*step;
+            x = (i+0.5)*step;
             area += (4/(1+x*x));
         }
         area *= step;

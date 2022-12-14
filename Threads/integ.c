@@ -52,7 +52,7 @@ void *integ(void *arg)
 	step = 1.0/size;
 	for(i = *offset; i < size; i += NUM_THREADS)
 	{
-		x = i*step;
+		x = (i+0.5)*step;
 		area += (4/(1+x*x));
 	}
 	

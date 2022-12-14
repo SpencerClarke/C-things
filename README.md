@@ -33,6 +33,6 @@
 ## <a href="Threads/">Threads</a>
 <p>This folder contains some experimental proof of concept programs that estimate pi and divide up the problem of estimation and distribute it among multiple threads. Two programs use monte carlo pi estimation using random points, and two of them calculate pi by estimating the definite integral of 4/(x²+1) over the interval 0 <= x <= 1. There are versions of both methods using pthreads, and OpenMP because I wanted to try both methods.
 
-It also contains a folder called "GradientBoosting" which has my Decision Tree and Gradient Boosting implementations in C. It is modified to use multiple threads in the decision tree's cost function using OpenMP. run.sh gets the predictions from the program and plots them using pyplot.
+It also contains a folder called "GradientBoosting" which has my one-dimensional Decision Tree regressor and Gradient Boosting implementations in C. It is modified to use multiple threads in the decision tree's cost function using OpenMP. run.sh gets the predictions from the program and plots them using pyplot.
 </p>
 

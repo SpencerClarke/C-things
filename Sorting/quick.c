@@ -106,6 +106,7 @@ void quicksort_fork(int shm_id, int low, int high, int depth)
 
 	if(depth < 8)
 	{
+		shmdt(arr);
 		if(fork() == 0)
 		{
 			quicksort_fork(shm_id, i+1, high, depth+1);
@@ -115,12 +116,14 @@ void quicksort_fork(int shm_id, int low, int high, int depth)
 		{
 			quicksort_fork(shm_id, low, i-1, depth+1);
 			wait(NULL);
+
 		}
 	}
 	else
 	{
 		quicksort_vanilla(arr, low, i-1);
 		quicksort_vanilla(arr, i+1, high);
+		shmdt(arr);
 	}
 }
 

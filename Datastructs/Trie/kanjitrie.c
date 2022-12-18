@@ -204,8 +204,8 @@ void _destroy(struct Node *current)
         for(i = 0; i < current->writing_count; i++)
             free(current->writing_list[i]);
         free(current->writing_list);
+        free(current->commonality_order);
     }
-    free(current->commonality_order);
     free(current->children);
     free(current);
 }

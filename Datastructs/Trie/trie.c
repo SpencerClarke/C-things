@@ -22,7 +22,6 @@ struct Trie
 struct Trie create_trie(void);
 void add_word(struct Trie *trie, char *word, int value);
 int index_of(struct Trie *trie, char *word);
-void delete(struct Trie *trie, char *word);
 struct Node *_get_highest_node(struct Node *current, int current_max);
 int get_highest_key(struct Trie *trie, char *buffer, char *start, int buff_size);
 int has_key(struct Trie *trie, char *word);
@@ -153,69 +152,6 @@ int has_key(struct Trie *trie, char *word)
     else
     {
         return 0;
-    }
-}
-void delete(struct Trie *trie, char *word)
-{
-    int i;
-    int j;
-    int found;
-    int length;
-    char *new_word;
-    struct Node *current_node;
-    struct Node *previous_node;
-
-    if(word[0] == '\0')
-    {
-        trie->root->is_word = 0;
-        return;
-    }
-    current_node = trie->root;
-    
-    for(i = 0; word[i] != '\0'; i++)
-    {
-        found = 0;
-        for(j = 0; j < current_node->child_count; j++)
-        {
-            if(current_node->children[j]->key_part == word[i])
-            {
-                previous_node = current_node;
-                current_node = current_node->children[j];
-                found = 1;
-                break;
-            }
-        }
-        if(!found)
-        {
-            return;
-        }
-    }
-    if(current_node->child_count == 0)
-    {
-        previous_node->children[j] = NULL;
-        previous_node->child_count--;
-        if(j == 0)
-            previous_node->children[0] = previous_node->children[previous_node->child_count];
-
-        free(current_node->children);
-        free(current_node);
-        if(!previous_node->is_word)
-        {
-            length = strlen(word);
-            new_word = malloc(sizeof(char) * length);
-            for(i = 0; i < length-1; i++)
-            {
-                new_word[i] = word[i];
-            }
-            new_word[i] = '\0';
-            delete(trie, new_word);
-            free(new_word);
-        }
-    }
-    else
-    {
-        current_node->is_word = 0;
-        return;
     }
 }
 struct Node *_get_highest_node(struct Node *current, int current_max)

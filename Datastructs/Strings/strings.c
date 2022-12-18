@@ -13,15 +13,6 @@ int strings_equal(struct string stra, struct string strb);
 int string_comp(struct string stra, struct string strb);
 void string_slice(struct string stra, int from, int to);
 
-int main(void)
-{
-	struct string str, str2;
-	str = new_string("abcdef");
-	string_slice(str, 0, 5);
-	puts(str.content);
-	return 0;
-}
-
 struct string new_string(char *a)
 {
 	int i;

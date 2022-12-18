@@ -73,7 +73,6 @@ int main(int argc, char **argv)
 
 	printf("Unsorted items: %d\n\n", badcount);
 
-	shmdt(shm_ptr);
 	shmctl(shm_id, IPC_RMID, NULL);
 	return 0;
 }

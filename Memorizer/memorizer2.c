@@ -224,6 +224,13 @@ int main(int argc, char **argv)
 	}
 	fclose(fin);
 
+	struct TestNode *print_temp;
+	print_temp = list.tail;
+	while(print_temp != NULL)
+	{
+		wprintf(L"%ls\n", print_temp->writing);
+		print_temp = print_temp->prev;
+	}
 	stack = recall_create();
 	input_buffer = (wchar_t *)malloc(sizeof(wchar_t) * buffer_size);
 	if(input_buffer == NULL)
@@ -286,7 +293,6 @@ int main(int argc, char **argv)
 
 	recall_destroy(&stack);
 	test_destroy(&list);
-
 	return 0;
 }
 
@@ -415,6 +421,7 @@ void test_rand_insert(struct TestList *list, wchar_t *meaning, wchar_t *reading,
 		new->next = list->head;
 		list->head->prev = new;
 		list->head = new;
+		new->prev = NULL;
 		list->focus = new;
 	}
 	else if(pos == list->len)
@@ -459,7 +466,7 @@ int test_submit(struct TestList *list, wchar_t *answer)
 	}
 	else
 	{
-		if(list->len == 0)
+		if(list->len == 1)
 		{
 			return 0;
 		}
@@ -514,7 +521,7 @@ int test_revert(struct TestList *list, struct RecallStack *stack, int n)
 	int i;
 	int cval;
 	struct TestNode *temp;
-	
+
 	if(n > stack->len)
 	{
 		return 0;
@@ -549,6 +556,7 @@ int test_revert(struct TestList *list, struct RecallStack *stack, int n)
 				list->tail->prev->next = list->tail;
 			}
 			list->tail = temp;
+
 		}
 		stack->len--;
 	}

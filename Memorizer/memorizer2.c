@@ -6,7 +6,7 @@
 #include <unistd.h>
 
 #define BUFF_SIZE 256
-#define MES_BASE_SIZE 2048
+
 struct TestNode 
 {
 	struct TestNode *next;
@@ -66,8 +66,6 @@ int main(int argc, char **argv)
 	wchar_t *meaning_buffer;
 	int pos;
 	wchar_t *input_buffer;
-	wchar_t *status_message;
-	int message_len;
 	struct TestList list;
 	struct RecallStack stack;
 
@@ -126,7 +124,7 @@ int main(int argc, char **argv)
 		if(pos >= buffer_size-1)
 		{
 			buffer_size *= 2;
-			reading_buffer = (wchar_t *)realloc(meaning_buffer, sizeof(wchar_t) * buffer_size);
+			reading_buffer = (wchar_t *)realloc(reading_buffer, sizeof(wchar_t) * buffer_size);
 			if(reading_buffer == NULL)
 			{
 				perror("Realloc error");
@@ -138,7 +136,7 @@ int main(int argc, char **argv)
 				perror("Realloc error");
 				exit(3);
 			}
-			writing_buffer = (wchar_t *)realloc(meaning_buffer, sizeof(wchar_t) * buffer_size);
+			meaning_buffer = (wchar_t *)realloc(meaning_buffer, sizeof(wchar_t) * buffer_size);
 			if(reading_buffer == NULL)
 			{
 				perror("Realloc error");
@@ -234,19 +232,11 @@ int main(int argc, char **argv)
 		exit(2);
 	}
 
-	message_len = MES_BASE_SIZE-1 + buffer_size*3;
-	status_message = (wchar_t *)malloc(sizeof(wchar_t) * (message_len+1));
-	if(status_message == NULL)
-	{
-		perror("Malloc error");
-		exit(2);
-	}
-	swprintf(status_message, message_len, L"Terms remaining: %d\n", list.len);
+	system("clear");
+	wprintf(L"Terms remaining: %d\n\n\n", list.len);
 	ret = 0;
 	while(ret != 2)
 	{
-		system("clear");
-		wprintf(L"%ls\n\n\n", status_message);
 
 		wcsncpy(meaning_buffer, test_peek_meaning(&list), buffer_size);
 		wcsncpy(reading_buffer, test_peek_reading(&list), buffer_size);
@@ -264,6 +254,9 @@ int main(int argc, char **argv)
 			input_buffer[i] = c;
 		}
 		input_buffer[i] = '\0';
+
+		system("clear");
+
 		if(i == 0)
 			is_num = 0;
 		
@@ -271,12 +264,12 @@ int main(int argc, char **argv)
 		{
 			if(test_revert(&list, &stack, ac) == 1)
 			{
-				swprintf(status_message, message_len, L"Going back %d questions.\nTerms remaining: %d\n", ac, list.len); 
+				wprintf(L"Going back %d questions.\nTerms remaining: %d\n", ac, list.len); 
 			}
 			else
 			{
 
-				swprintf(status_message, message_len, L"Could not go back %d questions.\nTerms remaining: %d\n", ac, list.len); 
+				wprintf(L"Could not go back %d questions.\nTerms remaining: %d\n", ac, list.len); 
 			}
 		}
 		else
@@ -284,18 +277,20 @@ int main(int argc, char **argv)
 			ret = test_submit(&list, input_buffer);
 			recall_push(&stack, ret);
 			if(ret)
-				swprintf(status_message, message_len, L"Correct.\nTerms remaining: %d\n", list.len);
+				wprintf(L"Correct.\nTerms remaining: %d\n", list.len);
 			else
-				swprintf(status_message, message_len, L"Incorrect.\nMeaning: %ls\nReading: %ls\nWriting: %ls\n\nTerms remaining: %d\n", meaning_buffer, reading_buffer, writing_buffer, list.len);
+				wprintf(L"Incorrect.\nMeaning: %ls\nReading: %ls\nWriting: %ls\n\nTerms remaining: %d\n", meaning_buffer, reading_buffer, writing_buffer, list.len);
 		}
+		wprintf(L"\n\n\n");
 	}
+
 	free(reading_buffer);
 	free(writing_buffer);
 	free(meaning_buffer);
-	free(status_message);
 
 	recall_destroy(&stack);
 	test_destroy(&list);
+
 	return 0;
 }
 

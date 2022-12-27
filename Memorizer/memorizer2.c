@@ -5,7 +5,7 @@
 #include <time.h>
 #include <unistd.h>
 
-#define BUFF_SIZE 256
+#define BUFF_SIZE 4
 
 struct TestNode 
 {
@@ -60,12 +60,23 @@ int main(int argc, char **argv)
 	int is_num;
 	int ret;
 	int state;
-	int buffer_size;
+
+	int reading_buffer_size;
 	wchar_t *reading_buffer;
+	wchar_t *current_reading;
+
+	int writing_buffer_size;
 	wchar_t *writing_buffer;
+	wchar_t *current_writing;
+
+	int meaning_buffer_size;
 	wchar_t *meaning_buffer;
-	int pos;
+	wchar_t *current_meaning;
+
+	int input_buffer_size;
 	wchar_t *input_buffer;
+
+	int pos;
 	struct TestList list;
 	struct RecallStack stack;
 
@@ -87,21 +98,21 @@ int main(int argc, char **argv)
 
 	list = test_create();
 
-	buffer_size = BUFF_SIZE;
+	meaning_buffer_size = reading_buffer_size = writing_buffer_size = BUFF_SIZE;
 	
-	reading_buffer = (wchar_t * )malloc(sizeof(wchar_t) * buffer_size);
+	reading_buffer = (wchar_t * )malloc(sizeof(wchar_t) * reading_buffer_size);
 	if(reading_buffer == NULL)
 	{
 		perror("Malloc error");
 		exit(2);
 	}
-	writing_buffer = (wchar_t * )malloc(sizeof(wchar_t) * buffer_size);
+	writing_buffer = (wchar_t * )malloc(sizeof(wchar_t) * writing_buffer_size);
 	if(writing_buffer == NULL)
 	{
 		perror("Malloc error");
 		exit(2);
 	}
-	meaning_buffer = (wchar_t * )malloc(sizeof(wchar_t) * buffer_size);
+	meaning_buffer = (wchar_t * )malloc(sizeof(wchar_t) * meaning_buffer_size);
 	if(meaning_buffer == NULL)
 	{
 		perror("Malloc error");
@@ -112,39 +123,27 @@ int main(int argc, char **argv)
 
 	state = 0;
 	pos = 0;
-	while(c = getwc(fin))
+	while((c = getwc(fin)))
 	{
-		if(state == 0 && pos == 0)
-		{
-			if(c == '\n' || c == ' ')
-				continue;
-			if(c == EOF)
-				break;
-		}
-		if(pos >= buffer_size-1)
-		{
-			buffer_size *= 2;
-			reading_buffer = (wchar_t *)realloc(reading_buffer, sizeof(wchar_t) * buffer_size);
-			if(reading_buffer == NULL)
-			{
-				perror("Realloc error");
-				exit(3);
-			}
-			writing_buffer = (wchar_t *)realloc(writing_buffer, sizeof(wchar_t) * buffer_size);
-			if(writing_buffer == NULL)
-			{
-				perror("Realloc error");
-				exit(3);
-			}
-			meaning_buffer = (wchar_t *)realloc(meaning_buffer, sizeof(wchar_t) * buffer_size);
-			if(reading_buffer == NULL)
-			{
-				perror("Realloc error");
-				exit(3);
-			}
-		}
 		if(state == 0)
 		{
+			if(pos == 0)
+			{
+				if(c == '\n' || c == ' ')
+					continue;
+				if(c == EOF)
+					break;
+			}
+			if(pos >= meaning_buffer_size-1)
+			{
+				meaning_buffer_size *= 2;
+				meaning_buffer = (wchar_t *)realloc(meaning_buffer, sizeof(wchar_t) * meaning_buffer_size);
+				if(meaning_buffer == NULL)
+				{
+					perror("Realloc error");
+					exit(3);
+				}
+			}
 			if(c == ',')
 			{
 				meaning_buffer[pos] = '\0';
@@ -172,6 +171,16 @@ int main(int argc, char **argv)
 		}
 		else if(state == 1)
 		{
+			if(pos >= reading_buffer_size-1)
+			{
+				reading_buffer_size *= 2;
+				reading_buffer = (wchar_t *)realloc(reading_buffer, sizeof(wchar_t) * reading_buffer_size);
+				if(reading_buffer == NULL)
+				{
+					perror("Realloc error");
+					exit(3);
+				}
+			}
 			if(c == ',')
 			{
 				reading_buffer[pos] = '\0';
@@ -181,14 +190,34 @@ int main(int argc, char **argv)
 			else if(c == EOF)
 			{
 				reading_buffer[pos] = '\0';
-				wcsncpy(writing_buffer, reading_buffer, buffer_size-1);
+				if(reading_buffer > writing_buffer)
+				{
+					writing_buffer_size = reading_buffer_size;
+					writing_buffer = (wchar_t *)realloc(writing_buffer, sizeof(wchar_t) * writing_buffer_size);
+					if(writing_buffer == NULL)
+					{
+						perror("Realloc error");
+						exit(3);
+					}
+				}
+				wcsncpy(writing_buffer, reading_buffer, writing_buffer_size-1);
 				test_rand_insert(&list, meaning_buffer, reading_buffer, writing_buffer);
 				break;
 			}
 			else if(c == '\n')
 			{
 				reading_buffer[pos] = '\0';
-				wcsncpy(writing_buffer, reading_buffer, buffer_size-1);
+				if(reading_buffer > writing_buffer)
+				{
+					writing_buffer_size = reading_buffer_size;
+					writing_buffer = (wchar_t *)realloc(writing_buffer, sizeof(wchar_t) * writing_buffer_size);
+					if(writing_buffer == NULL)
+					{
+						perror("Realloc error");
+						exit(3);
+					}
+				}
+				wcsncpy(writing_buffer, reading_buffer, writing_buffer_size-1);
 				test_rand_insert(&list, meaning_buffer, reading_buffer, writing_buffer);
 				state = 0;
 				pos = 0;
@@ -201,6 +230,16 @@ int main(int argc, char **argv)
 		}
 		else if(state == 2)
 		{
+			if(pos >= writing_buffer_size-1)
+			{
+				writing_buffer_size *= 2;
+				writing_buffer = (wchar_t *)realloc(writing_buffer, sizeof(wchar_t) * writing_buffer_size);
+				if(writing_buffer == NULL)
+				{
+					perror("Realloc error");
+					exit(3);
+				}
+			}
 			if(c == EOF)
 			{
 				writing_buffer[pos] = '\0';
@@ -222,10 +261,15 @@ int main(int argc, char **argv)
 		}	
 	}
 	fclose(fin);
+	free(reading_buffer);
+	free(writing_buffer);
+	free(meaning_buffer);
 
 	stack = recall_create();
 
-	input_buffer = (wchar_t *)malloc(sizeof(wchar_t) * buffer_size);
+	input_buffer_size = meaning_buffer_size > reading_buffer_size ? meaning_buffer_size : reading_buffer_size;
+	input_buffer_size = input_buffer_size > writing_buffer_size ? input_buffer_size : writing_buffer_size;
+	input_buffer = (wchar_t *)malloc(sizeof(wchar_t) * input_buffer_size);
 	if(input_buffer == NULL)
 	{
 		perror("Malloc error");
@@ -237,15 +281,14 @@ int main(int argc, char **argv)
 	ret = 0;
 	while(ret != 2)
 	{
+		current_meaning = test_peek_meaning(&list);
+		current_reading = test_peek_reading(&list);
+		current_writing = test_peek_writing(&list);
 
-		wcsncpy(meaning_buffer, test_peek_meaning(&list), buffer_size);
-		wcsncpy(reading_buffer, test_peek_reading(&list), buffer_size);
-		wcsncpy(writing_buffer, test_peek_writing(&list), buffer_size);
-
-		wprintf(L"%ls: ", meaning_buffer);
+		wprintf(L"%ls: ", current_meaning);
 		is_num = 1;
 		ac = 0;
-		for(i = 0;(c = getwchar()) != '\n' && i < BUFF_SIZE-1; i++)
+		for(i = 0;(c = getwchar()) != '\n' && i < input_buffer_size-1; i++)
 		{
 			if(c <= '9' && c >= '0')
 				ac = ac * 10 + c - '0';
@@ -279,17 +322,17 @@ int main(int argc, char **argv)
 			if(ret)
 				wprintf(L"Correct.\nTerms remaining: %d\n", list.len);
 			else
-				wprintf(L"Incorrect.\nMeaning: %ls\nReading: %ls\nWriting: %ls\n\nTerms remaining: %d\n", meaning_buffer, reading_buffer, writing_buffer, list.len);
+				wprintf(L"Incorrect.\nMeaning: %ls\nReading: %ls\nWriting: %ls\n\nTerms remaining: %d\n", current_meaning, current_reading, current_writing, list.len);
 		}
 		wprintf(L"\n\n\n");
 	}
-
-	free(reading_buffer);
-	free(writing_buffer);
-	free(meaning_buffer);
-
+	
+	free(input_buffer);
 	recall_destroy(&stack);
 	test_destroy(&list);
+
+	system("clear");
+	wprintf(L"Set complete. Congrats.\n");
 
 	return 0;
 }
@@ -374,35 +417,29 @@ void test_rand_insert(struct TestList *list, wchar_t *meaning, wchar_t *reading,
 		exit(1);
 	}
 
-	/*Copy in the meaning*/
-	for(i = 0; meaning[i] != '\0'; i++);
-	new->meaning = (wchar_t *)malloc(sizeof(wchar_t) * (i+1));
+	new->meaning = (wchar_t *)malloc(sizeof(wchar_t) * (wcslen(meaning) + 1));
 	if(new->meaning == NULL)
 	{
 		perror("Malloc error");
 		exit(1);
 	}
-	for(i = 0; (new->meaning[i] = meaning[i]) != '\0'; i++);
+	wcscpy(new->meaning, meaning);
 
-	/*Copy in the reading*/
-	for(i = 0; reading[i] != '\0'; i++);
-	new->reading = (wchar_t *)malloc(sizeof(wchar_t) * (i+1));
+	new->reading = (wchar_t *)malloc(sizeof(wchar_t) * (wcslen(reading)+1));
 	if(new->reading == NULL)
 	{
 		perror("Malloc error");
 		exit(1);
 	}
-	for(i = 0; (new->reading[i] = reading[i]) != '\0'; i++);
+	wcscpy(new->reading, reading);
 
-	/*Copy in the writing*/
-	for(i = 0; writing[i] != '\0'; i++);
-	new->writing = (wchar_t *)malloc(sizeof(wchar_t) * (i+1));
+	new->writing = (wchar_t *)malloc(sizeof(wchar_t) * (wcslen(writing)+1));
 	if(new->writing == NULL)
 	{
 		perror("Malloc error");
 		exit(1);
 	}
-	for(i = 0; (new->writing[i] = writing[i]) != '\0'; i++);
+	wcscpy(new->writing, writing);
 
 	current = list->head;
 	pos = rand() % (list->len + 1);
@@ -445,7 +482,6 @@ void test_rand_insert(struct TestList *list, wchar_t *meaning, wchar_t *reading,
 }
 int test_submit(struct TestList *list, wchar_t *answer)
 {
-	int i;
 	struct TestNode *temp;
 	if(list->len == 0)
 	{

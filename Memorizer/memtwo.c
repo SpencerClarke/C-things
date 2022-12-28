@@ -1,4 +1,4 @@
-#include <stdio.h>
+`#include <stdio.h>
 #include <stdlib.h>
 #include <wchar.h>
 #include <locale.h>
@@ -541,6 +541,7 @@ int test_revert(struct TestList *list, struct RecallStack *stack, int n)
 	for(i = 0; i < n; i++)
 	{
 		cval = recall_pop(stack);
+		stack->len--;
 		if(cval == 1)
 		{
 			list->focus = list->focus->prev;
@@ -570,7 +571,6 @@ int test_revert(struct TestList *list, struct RecallStack *stack, int n)
 			list->tail = temp;
 
 		}
-		stack->len--;
 	}
 	return 1;
 }

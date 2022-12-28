@@ -89,10 +89,6 @@ void push(int list_id, int value)
 	list->head = new_id;
 	shmdt(list);
 	shmdt(new);
-
-
-	list = (struct SharedLinkedList *)shmat(list_id, NULL, 0);
-	shmdt(list);
 }
 int pop(int list_id)
 {

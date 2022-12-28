@@ -10,14 +10,14 @@
 <p>This program helps to learn Japanese words more effectively. It takes in a txt file containig lines of two possible configurations. Each line starts with a word's meaning, followed by a comma, followed by the word written in hiragana, and then optionally followed by another comma and the word written in kanji. It then tests the user on each term, prompting them to enter the word in kanji if a kanji writing was specified, or in hiragana otherwise. If a term is guessed correctly, it is removed from the list it tests the user on. If it is guessed incorrectly, it is moved to the back of the list and the user will be tested on it again at the end.<br>In addition, there is also a program called memtwo.c, which serves the same purpose, except it stores words in a doubly linked list, which I used to create functionality to revert the quiz to the state it was in n terms ago when the user types in a number n instead of the answer to the current word.</p>
 
 ## <a href="Sorting/">Sorting</a>
-<p>This program takes in a number, produces that many random integers, and then sorts them using two variants of quicksort and compares the times it takes to sort them. The first one uses Unix forks and shared memory to have multiple processes working on sorting different partitions of the list, and stops generating forks after it is 8 layers into the recursion, thus creating 256 processes in total. This may have some speed advantage over the second one, which is just regular quick sort, for larger sets.</p>
+<p>This program takes in a number, produces that many random integers, and then sorts them using two variants of quicksort and compares the times it takes to sort them. The first one uses Unix forks and shared memory to have multiple processes working on sorting different partitions of the list, and stops generating forks after it is 8 layers into the recursion, thus creating 256 processes in total. On computers with multiple CPUs, this may have some speed advantage over the second one, which is just regular quick sort, for larger sets.</p>
 
 ## <a href="Datastructs/">Datastructs</a>
 <p>This folder is going to have data structures that I write when I am bored. For now it contains the following things
 <ol>
     <li>A binary search tree with implementations to insert values, check if values exist, and remove values <a href="Datastructs/BST"> here</a></li>
-    <li>A linked list that sits in shared memory, where each node is a value and the shared memory ID of the next node. I came up with this when I was trying to think of a joke about not wanting to use malloc. <a href="Datastructs/SharedLinkedLists"> here</a></li>
-    <li>A trie that can store a bunch of strings and pair them with ints. The integer value can then be retrieved for any given string, and the string with the highest integer value after some prefix can be obtained too. There is also functionality to remove nodes and free the entire tree. <a href="Datastructs/Trie">here</a></li>
+    <li>A sort of linked list that sits in shared memory, where each node is a value and the shared memory ID of the next node. I came up with this when I was trying to think of a joke about not wanting to use malloc. <a href="Datastructs/SharedLinkedLists"> here</a></li>
+    <li>A trie that can store a bunch of strings and pair them with ints. The integer value can then be retrieved for any given string, and the string with the highest integer value after some prefix can be obtained too. There is also functionality to free the entire tree. <a href="Datastructs/Trie">here</a></li>
     <li>A trie that uses wide chars and is specialized for converting words in hiragana to kanji. <a href="Datastructs/Trie">here</a></li>
 </ol>
 </p>
@@ -31,7 +31,7 @@
 </p>
 
 ## <a href="Threads/">Threads</a>
-<p>This folder contains some experimental proof of concept programs that use pthreads to estimate pi and divide up the problem of estimation and distribute it among multiple pthreads. Two programs use monte carlo pi estimation using random points, and two of them calculate pi by estimating the definite integral of 4/(x²+1) over the interval 0 <= x <= 1.
+<p>This folder contains some experimental proof of concept programs that use pthreads to estimate pi and divide up the problem of estimation and distribute it among multiple pthreads. One program uses monte carlo pi estimation using random points, and one of them calculates pi by estimating the definite integral of 4/(x²+1) over the interval 0 <= x <= 1.
 
 It also contains a folder called "GradientBoosting" which has my one-dimensional Decision Tree regressor and Gradient Boosting implementations in C. It is modified to use multiple threads in the decision tree's cost function using OpenMP. run.sh gets the predictions from the program and plots them using pyplot.
 </p>

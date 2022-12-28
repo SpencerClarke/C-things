@@ -131,7 +131,7 @@ int main(int argc, char **argv)
 			{
 				if(c == '\n' || c == ' ')
 					continue;
-				if(c == EOF)
+				if(c == WEOF)
 					break;
 			}
 			if(pos >= meaning_buffer_size-1)
@@ -150,7 +150,7 @@ int main(int argc, char **argv)
 				state = 1;
 				pos = 0;
 			}
-			else if(c == EOF || c == '\n')
+			else if(c == WEOF || c == '\n')
 			{
 				wprintf(L"File improperly formatted.\n");
 
@@ -187,21 +187,10 @@ int main(int argc, char **argv)
 				state = 2;
 				pos = 0;
 			}
-			else if(c == EOF)
+			else if(c == WEOF)
 			{
 				reading_buffer[pos] = '\0';
-				if(reading_buffer > writing_buffer)
-				{
-					writing_buffer_size = reading_buffer_size;
-					writing_buffer = (wchar_t *)realloc(writing_buffer, sizeof(wchar_t) * writing_buffer_size);
-					if(writing_buffer == NULL)
-					{
-						perror("Realloc error");
-						exit(3);
-					}
-				}
-				wcsncpy(writing_buffer, reading_buffer, writing_buffer_size-1);
-				test_rand_insert(&list, meaning_buffer, reading_buffer, writing_buffer);
+				test_rand_insert(&list, meaning_buffer, reading_buffer, reading_buffer);
 				break;
 			}
 			else if(c == '\n')
@@ -229,7 +218,7 @@ int main(int argc, char **argv)
 					exit(3);
 				}
 			}
-			if(c == EOF)
+			if(c == WEOF)
 			{
 				writing_buffer[pos] = '\0';
 				test_rand_insert(&list, meaning_buffer, reading_buffer, writing_buffer);

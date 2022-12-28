@@ -207,18 +207,7 @@ int main(int argc, char **argv)
 			else if(c == '\n')
 			{
 				reading_buffer[pos] = '\0';
-				if(reading_buffer > writing_buffer)
-				{
-					writing_buffer_size = reading_buffer_size;
-					writing_buffer = (wchar_t *)realloc(writing_buffer, sizeof(wchar_t) * writing_buffer_size);
-					if(writing_buffer == NULL)
-					{
-						perror("Realloc error");
-						exit(3);
-					}
-				}
-				wcsncpy(writing_buffer, reading_buffer, writing_buffer_size-1);
-				test_rand_insert(&list, meaning_buffer, reading_buffer, writing_buffer);
+				test_rand_insert(&list, meaning_buffer, reading_buffer, reading_buffer);
 				state = 0;
 				pos = 0;
 			}

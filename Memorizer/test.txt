@@ -19,7 +19,7 @@ lecture,こうぎ,講義
 industry,こうぎょう,工業
 factory,こじょう,工場
 traffic,こうつう,交通
-compare,くらべる,比べる
+compare,くらべる
 airport,くうこう,空港
 vacinity; around,まわり,周り
 government,せいふ,政府

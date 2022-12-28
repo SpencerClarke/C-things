@@ -1,0 +1,3 @@
+side; next to,よこ,横
+quiet,しずかな,静かな
+

@@ -1,4 +1,4 @@
-`#include <stdio.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <wchar.h>
 #include <locale.h>
@@ -51,6 +51,7 @@ wchar_t *test_peek_writing(struct TestList *list);
 wchar_t *test_peek_meaning(struct TestList *list);
 int test_revert(struct TestList *list, struct RecallStack *stack, int n);
 void test_destroy(struct TestList *list);
+void test_inform_confusion(struct TestList *list, wchar_t *writing);
 
 int main(int argc, char **argv)
 {
@@ -144,7 +145,7 @@ int main(int argc, char **argv)
 					exit(3);
 				}
 			}
-			if(c == ',')
+			if(c == ',' || c == L'\u3001')
 			{
 				meaning_buffer[pos] = '\0';
 				state = 1;
@@ -181,7 +182,7 @@ int main(int argc, char **argv)
 					exit(3);
 				}
 			}
-			if(c == ',')
+			if(c == ',' || c == L'\u3001')
 			{
 				reading_buffer[pos] = '\0';
 				state = 2;
@@ -255,7 +256,7 @@ int main(int argc, char **argv)
 	}
 
 	system("clear");
-	wprintf(L"Terms remaining: %d\n\n\n", list.len);
+	wprintf(L"Terms remaining: %d\n\n\n\n", list.len);
 	ret = 0;
 	while(ret != 2)
 	{
@@ -300,7 +301,11 @@ int main(int argc, char **argv)
 			if(ret)
 				wprintf(L"Correct.\nTerms remaining: %d\n", list.len);
 			else
-				wprintf(L"Incorrect.\nMeaning: %ls\nReading: %ls\nWriting: %ls\n\nTerms remaining: %d\n", current_meaning, current_reading, current_writing, list.len);
+			{
+				wprintf(L"Incorrect.\nMeaning: %ls\nReading: %ls\nWriting: %ls\n\n", current_meaning, current_reading, current_writing);
+				test_inform_confusion(&list, input_buffer);
+				wprintf(L"Terms remaining: %d\n", list.len);
+			}
 		}
 		wprintf(L"\n\n\n");
 	}
@@ -596,4 +601,23 @@ void test_destroy(struct TestList *list)
 	free(list->head->writing);
 	free(list->head->meaning);
 	free(list->head);
+}
+void test_inform_confusion(struct TestList *list, wchar_t *writing)
+{
+	struct TestNode *current;
+
+	current = list->head;
+	
+	while(current != NULL)
+	{
+		if(wcscmp(writing, current->writing) == 0)
+		{
+			wprintf(L"Confusion detected.\n");
+			wprintf(L"Meaning: %ls\n", current->meaning);
+			wprintf(L"Reading: %ls\n", current->reading);
+			wprintf(L"Writing: %ls\n\n", current->writing);
+			break;
+		}
+		current = current->next;
+	}
 }

@@ -2,28 +2,35 @@
 #include <stdlib.h>
 struct Set
 {
+	int bytes;
 	char *members;
 };
 
 char powtwo[8] = {1, 2, 4, 8, 16, 32, 64, 128};
 
 struct Set init(int size);
+
 void add(struct Set *set, int num);
 int exists(struct Set *set, int num);
 
+struct Set uni(struct Set *a, struct Set *b);
+struct Set inter(struct Set *a, struct Set *b)
+
 int main(void)
 {
+	struct Set a;
+	struct Set b;
+	struct Set u;
 	
-	struct Set set;
+	a = init(10);
+	b = init(10);
+	add(&a, 3);
+	add(&b, 4);
 
-	set = init(10);
-
-	add(&set, 3);
-	add(&set, 4);
-
-	printf("%d\n", exists(&set, 3));
-	printf("%d\n", exists(&set, 5));
-	printf("%d\n", exists(&set, 4));
+	u = uni(&a, &b);
+	printf("%d\n", exists(&u, 3));
+	printf("%d\n", exists(&u, 5));
+	printf("%d\n", exists(&u, 4));
 
 	return 0;
 }
@@ -31,6 +38,7 @@ struct Set init(int bytes)
 {
 	struct Set out;
 
+	out.bytes = bytes;
 	out.members = (char *)calloc(bytes, sizeof(char));
 	return out;
 }
@@ -57,4 +65,24 @@ int exists(struct Set *set, int num)
 	comp = set->members[frame] & comp;
 
 	return comp;
+}
+struct Set uni(struct Set *a, struct Set *b)
+{
+	struct Set out;
+	int i;
+
+	out.members = (char *)calloc(a->bytes, sizeof(char)); 
+	for(i = 0; i < a->bytes; i++)
+		out.members[i] = a->members[i] | b->members[i];
+
+	return out;
+}
+struct Set inter(struct Set *a, struct Set *b)
+{
+	struct Set out;
+	int i;
+
+	out.members = (char *)calloc(a->bytes, sizeof(char));
+	for(i = 0; i < a->bytes; i++)
+		out.members[i] = a->members[i] & b->members[i];
 }

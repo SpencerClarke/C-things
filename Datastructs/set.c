@@ -14,7 +14,9 @@ void add(struct Set *set, int num);
 int exists(struct Set *set, int num);
 
 struct Set uni(struct Set *a, struct Set *b);
-struct Set inter(struct Set *a, struct Set *b)
+struct Set inter(struct Set *a, struct Set *b);
+
+void destroy(struct Set *set);
 
 int main(void)
 {
@@ -28,9 +30,14 @@ int main(void)
 	add(&b, 4);
 
 	u = uni(&a, &b);
+
 	printf("%d\n", exists(&u, 3));
 	printf("%d\n", exists(&u, 5));
 	printf("%d\n", exists(&u, 4));
+	
+	destroy(&a);
+	destroy(&b);
+	destroy(&u);
 
 	return 0;
 }
@@ -47,10 +54,10 @@ void add(struct Set *set, int num)
 	int frame;
 	int offset;
 
-	frame = num / 8;
-	offset = num % 8;
+	frame = num / (sizeof(char)*8);
+	offset = num % (sizeof(char)*8);
 
-	set->members[frame] += powtwo[offset];
+	set->members[frame] = set->members[frame] | powtwo[offset];
 }
 int exists(struct Set *set, int num)
 {
@@ -58,8 +65,8 @@ int exists(struct Set *set, int num)
 	int offset;
 	char comp;
 
-	frame = num / 8;
-	offset = num % 8;
+	frame = num / (sizeof(char)*8);
+	offset = num % (sizeof(char)*8);
 	
 	comp = powtwo[offset];
 	comp = set->members[frame] & comp;
@@ -71,7 +78,7 @@ struct Set uni(struct Set *a, struct Set *b)
 	struct Set out;
 	int i;
 
-	out.members = (char *)calloc(a->bytes, sizeof(char)); 
+	out.members = (char *)calloc(a->bytes, sizeof(char)*8); 
 	for(i = 0; i < a->bytes; i++)
 		out.members[i] = a->members[i] | b->members[i];
 
@@ -82,7 +89,14 @@ struct Set inter(struct Set *a, struct Set *b)
 	struct Set out;
 	int i;
 
-	out.members = (char *)calloc(a->bytes, sizeof(char));
+	out.members = (char *)calloc(a->bytes, sizeof(char)*8);
+
 	for(i = 0; i < a->bytes; i++)
 		out.members[i] = a->members[i] & b->members[i];
+
+	return out;
+}
+void destroy(struct Set *set)
+{
+	free(set->members);
 }
